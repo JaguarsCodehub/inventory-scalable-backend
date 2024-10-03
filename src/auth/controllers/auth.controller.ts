@@ -2,9 +2,15 @@ import { Request, Response } from "express";
 import db from "../../utils/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { signupSchema } from "../../models/auth.schema";
+
 
 export const signUpUser = async (req: Request, res: Response): Promise<void> => {
-    const { email, password, role } = req.body;
+
+    const validateData = signupSchema.parse(req.body)
+
+
+    const { email, password, role } = validateData
 
     try {
         const existingUser = await db.user.findUnique({ where: { email } })
