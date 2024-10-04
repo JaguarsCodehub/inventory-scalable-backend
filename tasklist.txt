@@ -1,0 +1,17 @@
+Features: 
+Once the database is migrated, we’ll create the following routes:
+
+Order Routes (/orders):
+
+Create Order
+Get all Orders
+Get a specific Order by ID
+Update Order status
+Delete Order
+Delivery Routes (/deliveries):
+
+Create Delivery
+Get all Deliveries
+Get a specific Delivery by Order ID
+Update Delivery status
+Delete Delivery
