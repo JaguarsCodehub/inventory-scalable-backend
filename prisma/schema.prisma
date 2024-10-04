@@ -20,6 +20,7 @@ model User {
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orderes   Order[]
 }
 
 model Product {
@@ -30,4 +31,43 @@ model Product {
   stock       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int
+  items       Json // Storing the order items as JSON for flexibility (or you could create an OrderItem model)
+  totalAmount Float
+  status      OrderStatus @default(PENDING) // Enum to track order status
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  deliveries Delivery[] // One-to-many relation with Delivery
+}
+
+model Delivery {
+  id             Int            @id @default(autoincrement())
+  order          Order          @relation(fields: [orderId], references: [id])
+  orderId        Int
+  deliveryStatus DeliveryStatus @default(PENDING)
+  deliveryDate   DateTime?
+  trackingNumber String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  PENDING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  FAILED
 }
