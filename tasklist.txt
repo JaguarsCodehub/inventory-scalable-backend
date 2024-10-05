@@ -1,17 +1,22 @@
 Features: 
-Once the database is migrated, we’ll create the following routes:
 
-Order Routes (/orders):
+Caching with Redis for products, user sessions, and frequently queried orders.
+Rate Limiting by simulating heavy traffic on certain endpoints.
+Load Balancing and performance tests to see how your microservices handle load.
 
-Create Order
-Get all Orders
-Get a specific Order by ID
-Update Order status
-Delete Order
-Delivery Routes (/deliveries):
+------------------------------
+Order Routes (/api/orders):
 
-Create Delivery
-Get all Deliveries
-Get a specific Delivery by Order ID
-Update Delivery status
-Delete Delivery
+Create Order Done ✅
+Get all Orders Done ✅
+Get a specific Order by ID Done ✅      
+Update Order status Done ✅
+Delete Order Done ✅
+
+Delivery Routes (/api/deliveries):
+
+Create Delivery Done ✅
+Get all Deliveries Done ✅
+Get a specific Delivery by Order ID Done ✅
+Update Delivery status Done ✅
+Delete Delivery Done ✅
