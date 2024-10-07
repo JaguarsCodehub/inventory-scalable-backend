@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import db from "../utils/prisma";
+import redisClient from "../utils/redis";
+
+const cacheKey = "all_products";
+let products;
 
 
 export const createProduct = async (req: Request, res: Response) => {
@@ -21,15 +25,6 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllProducts = async (req: Request, res: Response) => {
-    try {
-        const products = await db.product.findMany();
-        res.status(200).json(products)
-    } catch (error) {
-        console.log("Error getting products", error)
-        res.status(500).json({ message: (error as Error).message })
-    }
-}
 
 export const getProductById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
