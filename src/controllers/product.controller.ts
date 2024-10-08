@@ -10,6 +10,69 @@ const productSchema = z.object({
     price: z.number(),
     stock: z.number().min(0)
 });
+const LOW_STOCK_THRESHOLD = 10;
+
+
+// Remove Stock
+export const removeStock = async (req: Request, res: Response): Promise<void> => {
+    const { productId } = req.params;
+    const { quantity, userId } = req.body; // userId to track who removed the stock
+
+    try {
+        // Fetch product
+        const product = await db.product.findUnique({ where: { id: Number(productId) } });
+
+        if (!product) {
+            res.status(404).json({ error: "Product not found" });
+            return;
+        }
+
+        if (product.currentStock < quantity) {
+            res.status(400).json({ error: "Insufficient stock available" });
+            return;
+        }
+
+        // Update the stock
+        const updatedProduct = await db.product.update({
+            where: { id: Number(productId) },
+            data: { currentStock: product.currentStock - quantity }
+        });
+
+        // Record the stock change in StockHistory
+        await db.stockHistory.create({
+            data: {
+                productId: product.id,
+                changeType: "REMOVE",
+                quantity: quantity,
+                userId // Admin or user who removed the stock
+            }
+        });
+
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ error: (error as Error).message });
+    }
+};
+
+// Get Low Stock Products
+export const getLowStockProducts = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const lowStockProducts = await db.product.findMany({
+            where: {
+                currentStock: { lt: LOW_STOCK_THRESHOLD }
+            }
+        });
+
+        if (lowStockProducts.length === 0) {
+            res.status(200).json({ message: "No products with low stock" });
+            return;
+        }
+
+        res.status(200).json(lowStockProducts);
+    } catch (error) {
+        res.status(500).json({ error: (error as Error).message });
+    }
+};
 
 export const createProduct = async (req: Request, res: Response) => {
     try {
