@@ -1,7 +1,7 @@
 Features: 
 
 Caching with Redis for products, user sessions, and frequently queried orders. Done ✅
-Rate Limiting by simulating heavy traffic on certain endpoints.
+Rate Limiting by simulating heavy traffic on certain endpoints. Done ✅
 Load Balancing and performance tests to see how your microservices handle load.
 
 ------------------------------
